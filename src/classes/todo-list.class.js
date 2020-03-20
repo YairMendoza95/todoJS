@@ -1,0 +1,45 @@
+import { Todo } from "./todo.class";
+
+export class TodoList {
+    constructor() {
+        this.cargarLocalStorage();
+    }
+
+    nuevoTodo(todo) {
+        this.todos.push(todo);
+        this.guardaLocalStorage();
+    }
+
+    eliminarTodo(id) {
+        this.todos.filter(todo => todo.id != id);
+
+        this.guardaLocalStorage();
+    }
+
+    marcarCompletado(id) {
+        for (const todo of this.todos) {
+            if (todo.id == id) {
+                todo.completado = !todo.completado;
+                break;
+            }
+        }
+
+        this.guardaLocalStorage();
+    }
+
+    eliminarCompletados() {
+        this.todos.filter(todo => !todo.completado);
+
+        this.guardaLocalStorage();
+    }
+
+    guardaLocalStorage() {
+        localStorage.setItem('todo', JSON.stringify(this.todos));
+    }
+
+    cargarLocalStorage() {
+        this.todos = (localStorage.getItem('todo')) ? JSON.parse(localStorage.getItem('todo')) : [];
+
+        this.todos = this.todos.map(Todo.fromJSON);
+    }
+}
